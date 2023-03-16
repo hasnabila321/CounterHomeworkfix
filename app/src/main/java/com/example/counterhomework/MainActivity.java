@@ -1,5 +1,6 @@
 package com.example.counterhomework;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -13,7 +14,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView counterText;
     private Button counterBtn;
     private EditText input_text;
-    private int counter;
+
+    private int counter = 0;
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
@@ -27,15 +29,25 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt("result",counter);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         counterText= (TextView) findViewById(R.id.counterText);
         counterBtn= (Button) findViewById(R.id.counterBtn);
         counterBtn.setOnClickListener(clickListener);
         input_text= (EditText) findViewById(R.id.input_text);
 
-        initCounter();
+        if (savedInstanceState != null){
+            counter = savedInstanceState.getInt("result");
+            counterText.setText(Integer.toString(counter));
+        }
     }
     private void initCounter(){
         counter = 0;
